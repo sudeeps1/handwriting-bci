@@ -25,6 +25,13 @@ wdir="$1";
 inpm="$2";
 opfx="$3";
 
+# Prefer the repo-local custom LazyLM decoder if present.
+if [ -x "./kaldiLMScripts/latgen-lazylm-faster-mapped" ]; then
+  LATGEN_BIN="./kaldiLMScripts/latgen-lazylm-faster-mapped"
+else
+  LATGEN_BIN="latgen-lazylm-faster-mapped"
+fi
+
 olat="${opfx}lat_dec.ark";
 owrd="${opfx}words_dec.ark";
 oali="${opfx}align_dec.ark";
@@ -32,7 +39,7 @@ oali="${opfx}align_dec.ark";
 # generate lattices
 {
   date "+%F %T - Started latgen-lazylm-faster-mapped" && \
-  latgen-lazylm-faster-mapped \
+  "$LATGEN_BIN" \
     --acoustic-scale="$acoustic_scale" \
     --allow-partial="true" \
     --beam="$beam" \

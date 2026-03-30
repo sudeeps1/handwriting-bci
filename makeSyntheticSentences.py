@@ -101,7 +101,7 @@ def generateCharacterSequences(args):
     def _floats_feature(value):
         return tf.train.Feature(float_list=tf.train.FloatList(value=value))
     
-    writer = tf.python_io.TFRecordWriter(args['saveFile'])
+    writer = tf.io.TFRecordWriter(args['saveFile'])
     for trialIdx in range(args['nSentences']):
         feature = {'inputs': _floats_feature(np.ravel(synthNeuralBinned[trialIdx,:,:]).tolist()),
             'labels': _floats_feature(np.ravel(synthTargetsBinned[trialIdx,:,:]).tolist()),
