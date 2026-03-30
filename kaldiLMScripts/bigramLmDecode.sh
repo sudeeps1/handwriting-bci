@@ -2,6 +2,9 @@
 set -e;
 export LC_NUMERIC=C;
 
+# Fix for macOS System Integrity Protection (SIP) wiping DYLD paths for Kaldi
+export DYLD_FALLBACK_LIBRARY_PATH="$HOME/anaconda3/envs/bci_tf2/lib:$HOME/anaconda3/pkgs/openfst-1.8.4-ha393de7_1/lib:$DYLD_FALLBACK_LIBRARY_PATH"
+
 acoustic_scale=1.79;
 beam=65;
 max_active=5000000;
@@ -38,7 +41,6 @@ oali="${opfx}align_dec.ark";
     
 # generate lattices
 {
-  date "+%F %T - Started latgen-lazylm-faster-mapped" && \
   "$LATGEN_BIN" \
     --acoustic-scale="$acoustic_scale" \
     --allow-partial="true" \
@@ -46,8 +48,7 @@ oali="${opfx}align_dec.ark";
     --max-active="$max_active" \
     --min-active="20" \
    "$wdir/model" "$wdir/HCL.fst" "$wdir/G.fst" "ark,t:$inpm" \
-   "ark,t:$olat" "ark,t:$owrd" "ark,t:$oali" && \
-  date "+%F %T - Finished latgen-lazylm-faster-mapped";
+   "ark,t:$olat" "ark,t:$owrd" "ark,t:$oali" 2> /dev/null;
 } ||
 { echo "ERROR: Failed latgen-lazylm-faster-mapped, see \$log" && exit 1; }
 
@@ -60,8 +61,8 @@ owrd="${opfx}best_words.ark";
 olm="${opfx}best_lmscore.ark";
 oac="${opfx}best_acscore.ark";
 
-lattice-to-nbest --acoustic-scale=1.0 --n=128 "ark:$olat" "ark:$obest"
-nbest-to-linear "ark:$obest" "ark,t:$oali" "ark,t:$owrd" "ark,t:$olm" "ark,t:$oac"
+lattice-to-nbest --acoustic-scale=1.0 --n=128 "ark:$olat" "ark:$obest" 2> /dev/null
+nbest-to-linear "ark:$obest" "ark,t:$oali" "ark,t:$owrd" "ark,t:$olm" "ark,t:$oac" 2> /dev/null
 
 ali-to-phones "$wdir/model" "ark:$oali" ark,t:- 2> /dev/null |
 ./kaldiLMScripts/int2sym.pl -f 2- "$wdir/chars.txt" |
