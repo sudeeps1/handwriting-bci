@@ -17,6 +17,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 repoDir = os.path.dirname(os.path.abspath(__file__)) + '/'
 sys.path.insert(0, repoDir)
+os.chdir(repoDir)
 
 from parallelBash import parallelBash
 from kaldiReadWrite import readKaldiLatticeFile
