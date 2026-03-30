@@ -2,9 +2,6 @@
 set -e;
 export LC_NUMERIC=C;
 
-# Fix for macOS System Integrity Protection (SIP) wiping DYLD paths for Kaldi
-export DYLD_FALLBACK_LIBRARY_PATH="$HOME/anaconda3/envs/bci_tf2/lib:$HOME/anaconda3/pkgs/openfst-1.8.4-ha393de7_1/lib:$DYLD_FALLBACK_LIBRARY_PATH"
-
 acoustic_scale=1.79;
 beam=65;
 max_active=5000000;

@@ -49,11 +49,6 @@ os.environ['PATH'] += ':'+homeDir+'kaldi/src/gmmbin'
 os.environ['PATH'] += ':'+homeDir+'kaldi/tools/openfst-1.6.7/bin'
 os.environ['PATH'] += ':'+homeDir+'kaldi/src/latbin'
 
-# Anaconda fallback search for Kaldi binaries (e.g. lattice-to-nbest)
-conda_kaldi_bins = glob.glob(os.path.expanduser("~/anaconda3/pkgs/kaldi-*/bin"))
-for path in conda_kaldi_bins:
-    os.environ['PATH'] += ':' + path
-
 os.system('chmod +x ' + repoDir+'kaldiLMScripts/bigramLmDecode.sh')
 os.system('chmod +x ' + repoDir+'kaldiLMScripts/parseOptions.inc.sh')
 os.system('chmod +x ' + repoDir+'kaldiLMScripts/remove_transcript_dummy_boundaries.sh')
